@@ -29,6 +29,7 @@ _settings = {
 	}
 }
 
+
 def settings(key):
 	d = _settings.get(_value)
 	return d.get(key) if d else None

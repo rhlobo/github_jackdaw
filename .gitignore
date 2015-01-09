@@ -48,6 +48,7 @@ pip-log.txt
 /profile/
 .tox
 nosetests.xml
+/flask_session/
 
 ### OS generated files
 .DS_Store

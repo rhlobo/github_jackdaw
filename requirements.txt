@@ -5,5 +5,5 @@ coverage
 sh
 flask
 flask-script
-flask-sqlalchemy
-sqlalchemy
+GitHub-Flask
+Flask-Session
