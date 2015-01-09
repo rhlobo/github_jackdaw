@@ -3,7 +3,6 @@
 
 import sh
 import sys
-import flask.ext.migrate
 import flask.ext.script
 
 import server.app as server
@@ -12,7 +11,6 @@ import wsgi
 
 instance = server.flask_instance
 manager = flask.ext.script.Manager(instance)
-manager.add_command('db', flask.ext.migrate.MigrateCommand)
 
 
 @manager.command
