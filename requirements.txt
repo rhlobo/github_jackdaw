@@ -1,3 +1,9 @@
-requests
+pep8
+nose
+coverage
+
+sh
 flask
-GitHub-Flask
+flask-script
+flask-sqlalchemy
+sqlalchemy

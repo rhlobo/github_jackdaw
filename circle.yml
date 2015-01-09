@@ -1,0 +1,29 @@
+machine:
+  services:
+    - docker
+
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+  override:
+    - pip install -r requirements.txt
+
+
+test:
+  override:
+    - ./test.sh
+  post:
+    - if [[ -e ~/docker/github_jackdaw.tar ]]; then docker load --input ~/docker/github_jackdaw.tar; fi
+    - docker build -t rhlobo/github_jackdaw .
+    - mkdir -p ~/docker; docker save rhlobo/github_jackdaw > ~/docker/github_jackdaw.tar;
+
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push rhlobo/github_jackdaw:latest
+      - docker tag rhlobo/github_jackdaw:latest rhlobo/github_jackdaw:$CIRCLE_SHA1
+      - docker push rhlobo/github_jackdaw:$CIRCLE_SHA1
