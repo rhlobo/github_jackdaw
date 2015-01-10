@@ -7,3 +7,4 @@ flask
 flask-script
 GitHub-Flask
 Flask-Session
+Flask-BasicAuth
