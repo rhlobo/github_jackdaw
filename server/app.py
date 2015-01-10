@@ -1,3 +1,5 @@
+import sys
+
 import flask
 import flask.ext.github
 import flask.ext.script
@@ -22,6 +24,10 @@ flask_instance = _flask = flask.Flask(
 flask_instance.config.from_object('server.config.flask_commons')
 flask_instance.config.from_object(env.settings('FLASK_CONFIG_OBJECT'))
 
+if not flask_instance.config['BASIC_AUTH_USERNAME'] or not flask_instance.config['BASIC_AUTH_PASSWORD']:
+    print 'Setting non-empty BASIC_AUTH_USERNAME and BASIC_AUTH_PASSWORD environment variables is mandatory. Exiting...'
+    sys.exit()
+
 
 # INITIALIZING EXTENSIONS AND SERVICES
 # Extensions
@@ -41,7 +47,7 @@ oauth_token_storage = data.DoubleStorage(_flask, 'OAUTH_TOKEN')
 def index():
     if oauth_token_storage.get():
         return _flask.send_static_file('index.html')
-    flask.redirect(flask.url_for('auth.github_authorize'))
+    return flask.redirect(flask.url_for('auth.github_authorize'))
 
 
 # Blueprints

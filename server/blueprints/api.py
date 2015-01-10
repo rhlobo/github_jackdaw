@@ -7,12 +7,12 @@ _URIPATH_REGEX = re.compile(r'http[s]?://[^/]+/(.*)')
 
 
 def new_blueprint(github, basic_auth):
-    blueprint = flask.Blueprint('api', url_prefix='/api/v1')
+    blueprint = flask.Blueprint('api', __name__, url_prefix='/api')
 
 
-    @blueprint.route('/api/status')
+    @blueprint.route('/status')
     @basic_auth.required
-    def repo():
+    def status():
         data = {}
 
         user = github.get('user')
@@ -29,6 +29,33 @@ def new_blueprint(github, basic_auth):
             data['orgs'].append(orgdata)
 
         return json.dumps(data)
+
+
+    @blueprint.route('/hook/<org>', methods=['POST'])
+    @basic_auth.required
+    def createhook(org):
+        hook_registration = {
+            'name': 'web',
+            'active': True,
+            'events': ['push', 'pull_request'],
+            'config': {
+                'url': 'http://webhooks.chaordicsystems.com/hooks/push_and_pr',
+                'content_type': 'json'
+            }
+        }
+        return github.post('/orgs/%s/hooks' % org,
+                           data=hook_registration,
+                           headers={'Accept': 'application/vnd.github.sersi-preview+json'})
+
+
+    @blueprint.route('/hook/<org>', methods=['DELETE'])
+    @basic_auth.required
+    def deletehook(org):
+        hooks = github.get('orgs/%s/hooks' % organization['login'], headers={'Accept': 'application/vnd.github.sersi-preview+json'})
+        for hook in hooks:
+            github.delete('/orgs/%s/hooks/%s' % (org, hook['id']),
+                          headers={'Accept': 'application/vnd.github.sersi-preview+json'})
+        return True
 
 
     def _remove_host(url):

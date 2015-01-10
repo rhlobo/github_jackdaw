@@ -25,12 +25,12 @@ class AppConfigStorage(object):
         self.config_key = config_key
 
     def get(self):
-        if self.config_key in self.flask_instance:
-            return self.flask_instance[self.config_key]
+        if self.config_key in self.flask_instance.config:
+            return self.flask_instance.config[self.config_key]
         return None
 
     def set(self, value):
-        self.flask_instance[self.config_key] = value
+        self.flask_instance.config[self.config_key] = value
 
 
 class SessionStorage(object):

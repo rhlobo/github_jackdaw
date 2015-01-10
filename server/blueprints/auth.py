@@ -2,7 +2,7 @@ import flask
 
 
 def new_blueprint(github, oauth_token_storage):
-    blueprint = flask.Blueprint('auth', url_prefix='/auth')
+    blueprint = flask.Blueprint('auth', __name__, url_prefix='/auth')
 
 
     @blueprint.route('/github-authorize')

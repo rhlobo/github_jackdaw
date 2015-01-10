@@ -1,3 +1,4 @@
+/* jshint -W024 */
 (function(){
 
   /**
@@ -39,6 +40,27 @@
   /**
    * And of course we define a controller for our route.
    */
-  .controller( 'HomeCtrl', function HomeController( $scope ) {});
+  .controller( 'HomeCtrl', [ '$scope', '$http', function HomeController( $scope, $http ) {
+
+    function update() {
+      $http.get('/api/status').success(function(data, status, headers, config) {
+        $scope.status = data;
+      });
+    }
+
+    $scope.createHook = function(org) {
+      $http.post('/api/hook/' + org).then(function(result) {
+        update();
+      });
+    };
+
+    $scope.deleteHooks = function(org) {
+      $http.delete('/api/hook/' + org).then(function(result) {
+        update();
+      });
+    };
+
+    update();
+  }]);
 
 })();
