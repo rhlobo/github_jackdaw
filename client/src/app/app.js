@@ -1,6 +1,7 @@
 (function(){
 
   var app = angular.module( 'app', [
+    'angular-loading-bar',
     'ui.router',
     'templates-app',
     'templates-common',

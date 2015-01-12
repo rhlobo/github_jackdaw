@@ -37,14 +37,19 @@ def new_blueprint(github, basic_auth):
         hook_registration = {
             'name': 'web',
             'active': True,
-            'events': ['push', 'pull_request'],
+            'events': ['push'],
             'config': {
-                'url': 'http://webhooks.chaordicsystems.com/hooks/push_and_pr',
+                'url': 'https://webhooks.chaordicsystems.com/hooks/push_and_pr',
                 'content_type': 'json'
             }
         }
-        return github.post('/orgs/%s/hooks' % org,
-                           data=hook_registration,
+        import requests
+        requests.post('https://api.github.com/orgs/%s/hooks?access_token=e892d2c4720a76db6bd602517213114bc561e4cb' % org,
+                      data=json.dumps(hook_registration),
+                      headers={'Accept': 'application/vnd.github.sersi-preview+json'})
+        return True
+        return github.post('orgs/%s/hooks' % org,
+                           data=json.dumps(hook_registration),
                            headers={'Accept': 'application/vnd.github.sersi-preview+json'})
 
 
@@ -53,7 +58,7 @@ def new_blueprint(github, basic_auth):
     def deletehook(org):
         hooks = github.get('orgs/%s/hooks' % organization['login'], headers={'Accept': 'application/vnd.github.sersi-preview+json'})
         for hook in hooks:
-            github.delete('/orgs/%s/hooks/%s' % (org, hook['id']),
+            github.delete('orgs/%s/hooks/%s' % (org, hook['id']),
                           headers={'Accept': 'application/vnd.github.sersi-preview+json'})
         return True
 

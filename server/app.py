@@ -8,10 +8,15 @@ import flask.ext.basicauth
 
 import data
 import config.env as env
+import config.logs as logs
 
 import blueprints.api as api
 import blueprints.auth as auth
 import blueprints.webhook as webhook
+
+
+# CONFIGURING LOGGING
+logs.default_config()
 
 
 # INITIALIZING FLASK

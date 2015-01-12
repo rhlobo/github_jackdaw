@@ -69,11 +69,13 @@ module.exports = {
       'vendor/angular-ui-utils/modules/route/route.js',
       'vendor/ng-table/ng-table.js',
       'vendor/moment/moment.js',
-      'vendor/angular-bootstrap-datetimepicker/src/js/datetimepicker.js'
+      'vendor/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
+      'vendor/angular-loading-bar/src/loading-bar.js'
     ],
     css: [
       'vendor/ng-table/ng-table.css',
-      'vendor/angular-bootstrap-datetimepicker/src/css/datetimepicker.css'
+      'vendor/angular-bootstrap-datetimepicker/src/css/datetimepicker.css',
+      'vendor/angular-loading-bar/src/loading-bar.css'
     ],
     assets: [
     ]
