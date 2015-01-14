@@ -28,7 +28,7 @@ def new_blueprint(github, basic_auth):
             orgdata['hooks'] = github.get('orgs/%s/hooks' % organization['login'], headers={'Accept': 'application/vnd.github.sersi-preview+json'})
             data['orgs'].append(orgdata)
 
-        return json.dumps(data)
+        return flask.Response(json.dumps(data), content_type='application/json')
 
 
     @blueprint.route('/hook/<org>', methods=['POST'])
@@ -43,24 +43,24 @@ def new_blueprint(github, basic_auth):
                 'content_type': 'json'
             }
         }
-        import requests
-        requests.post('https://api.github.com/orgs/%s/hooks?access_token=e892d2c4720a76db6bd602517213114bc561e4cb' % org,
-                      data=json.dumps(hook_registration),
-                      headers={'Accept': 'application/vnd.github.sersi-preview+json'})
-        return True
-        return github.post('orgs/%s/hooks' % org,
-                           data=json.dumps(hook_registration),
-                           headers={'Accept': 'application/vnd.github.sersi-preview+json'})
+        github.request('POST', 'orgs/%s/hooks' % org,
+                       data=json.dumps(hook_registration),
+                       headers={'Accept': 'application/vnd.github.sersi-preview+json',
+                                'Content-Type': 'application/json'})
+        return status()
 
 
     @blueprint.route('/hook/<org>', methods=['DELETE'])
     @basic_auth.required
     def deletehook(org):
-        hooks = github.get('orgs/%s/hooks' % organization['login'], headers={'Accept': 'application/vnd.github.sersi-preview+json'})
+        hooks = github.get('orgs/%s/hooks' % org, headers={'Accept': 'application/vnd.github.sersi-preview+json'})
         for hook in hooks:
-            github.delete('orgs/%s/hooks/%s' % (org, hook['id']),
-                          headers={'Accept': 'application/vnd.github.sersi-preview+json'})
-        return True
+            try:
+                github.delete('orgs/%s/hooks/%s' % (org, hook['id']),
+                              headers={'Accept': 'application/vnd.github.sersi-preview+json'})
+            except:
+                pass
+        return status()
 
 
     def _remove_host(url):

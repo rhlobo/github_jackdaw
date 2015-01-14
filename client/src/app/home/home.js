@@ -42,25 +42,21 @@
    */
   .controller( 'HomeCtrl', [ '$scope', '$http', function HomeController( $scope, $http ) {
 
-    function update() {
-      $http.get('/api/status').success(function(data, status, headers, config) {
-        $scope.status = data;
-      });
-    }
+    $http.get('/api/status').success(function(data, status, headers, config) {
+      $scope.status = data;
+    });
 
     $scope.createHook = function(org) {
-      $http.post('/api/hook/' + org).then(function(result) {
-        update();
+      $http.post('/api/hook/' + org).success(function(data, status, headers, config) {
+        $scope.status = data;
       });
     };
 
     $scope.deleteHooks = function(org) {
-      $http.delete('/api/hook/' + org).then(function(result) {
-        update();
+      $http.delete('/api/hook/' + org).success(function(data, status, headers, config) {
+        $scope.status = data;
       });
     };
-
-    update();
   }]);
 
 })();
